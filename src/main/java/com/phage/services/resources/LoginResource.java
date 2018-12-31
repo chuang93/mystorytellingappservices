@@ -18,7 +18,6 @@ import java.util.Collections;
 @RestController
 public class LoginResource{
 
-
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
     public String verifyToken(String idTokenString) throws GeneralSecurityException, IOException {
         //TO DO:RESEARCH WHY IT IS RECOMENDED AND HOW TO MAKE TRANSPORT GLOBAL
