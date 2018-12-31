@@ -7,7 +7,6 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,6 @@ public class LoginResource{
 
     private static String CLIENT_ID = "474339377424-mufjbd5juv939iukdqpa09m15uudmd3b.apps.googleusercontent.com";
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
     public String verifyToken(String idtoken) throws GeneralSecurityException, IOException {
         //TO DO:RESEARCH WHY IT IS RECOMENDED AND HOW TO MAKE TRANSPORT GLOBAL
