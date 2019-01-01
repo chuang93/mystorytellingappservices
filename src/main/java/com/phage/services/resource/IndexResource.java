@@ -1,4 +1,4 @@
-package com.phage.services.resources;
+package com.phage.services.resource;
 
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestMapping;

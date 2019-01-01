@@ -1,7 +1,7 @@
-package com.phage.services.resources;
+package com.phage.services.resource;
 
 import com.phage.services.domain.User;
-import com.phage.services.repository.Service.UserRepositoryService;
+import com.phage.services.repository.service.UserRepositoryService;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;

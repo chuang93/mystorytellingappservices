@@ -1,12 +1,12 @@
-package com.phage.services.repository.Service;
+package com.phage.services.repository.service;
 
 import com.phage.services.domain.User;
 import com.phage.services.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-//Service class with the actual repository operations from the User DB repository, do not use direct Repository Classes in the controller layer.
-//@Component Annotation is superset of Repository, Service, and Controller but for some reason @Service doesnt work
+//service class with the actual repository operations from the User DB repository, do not use direct Repository Classes in the controller layer.
+//@Component Annotation is superset of Repository, service, and Controller but for some reason @service doesnt work
 @Component
 public class UserRepositoryService {
 
