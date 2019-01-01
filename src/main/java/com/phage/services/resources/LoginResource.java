@@ -1,5 +1,8 @@
 package com.phage.services.resources;
 
+import com.phage.services.domain.User;
+import com.phage.services.repository.UserRepository;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -51,11 +54,17 @@ public class LoginResource{
 
             // Use or store profile information
             // ...
-            if(emailVerified)
+            if (emailVerified) {
+
                 return "Email Verified";
-        } else {
-            return "Invalid ID token.";
+            } else {
+                return email + " unable to be verified against retrieved ID Token.";
+            }
         }
-        return "Unable to verify ID: " + idtoken;
+        return "Error, issue with id token sent: " + idtoken;
+    }
+
+    private boolean validateUserRepository(){
+        return false;
     }
 }
