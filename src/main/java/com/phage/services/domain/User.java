@@ -1,52 +1,66 @@
 package com.phage.services.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 public class User {
     //Annotations required for primary key field. Autogenerate this value uniquely
     @Id
-    private String id;
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    private String last_name;
+    @Column (name = "token", nullable = false, length = 100)
+    private String token;
 
-    private String first_name;
+    @Column (name = "last_name", nullable = false, length = 45)
+    private String lastName;
 
-    private String email_address;
+    @Column(name = "first_name", nullable = false, length = 45)
+    private String firstName;
 
-    private Timestamp create_time;
+    @Column(name = "email_address", nullable = false, length = 45)
+    private String email;
 
-    public String getId(){
+    @Column(name = "create_time", nullable = false)
+    private Timestamp createTime;
+
+    public Integer getId(){
         return id;
     }
-    public void setId(String id){
+    public void setId(Integer id){
         this.id = id;
     }
-    public String getLast_name(){
-        return last_name;
+    public String getToken(){
+        return token;
     }
-    public void setLast_name(String last_name){
-        this.last_name = last_name;
+    public void setToken(String token){
+        this.token = token;
     }
-    public String getFirst_name(){
-        return first_name;
+    public String getLastName(){
+        return lastName;
     }
-    public void setFirst_name(String first_name){
-        this.first_name = first_name;
+    public void setLastName(String lastName){
+        this.lastName = lastName;
     }
-    public String getEmail_address(){
-        return email_address;
+    public String getFirstName(){
+        return firstName;
     }
-    public void setEmail_address(String email_address){
-        this.email_address = email_address;
+    public void setFirstName(String firstName){
+        this.firstName = firstName;
     }
-    public Timestamp getCreate_Time(){
-        return create_time;
+    public String getEmail(){
+        return email;
     }
-    public void setCreate_Time(Timestamp created_time)
+    public void setEmail(String email){
+        this.email = email;
+    }
+    public Timestamp getCreateTime(){
+        return createTime;
+    }
+    public void setCreateTime(Timestamp createTime)
     {
-        this.create_time = created_time;
+        this.createTime = createTime;
     }
 }
