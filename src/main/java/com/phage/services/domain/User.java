@@ -1,8 +1,6 @@
 package com.phage.services.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Timestamp;
 
@@ -10,8 +8,7 @@ import java.sql.Timestamp;
 public class User {
     //Annotations required for primary key field. Autogenerate this value uniquely
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    private String id;
 
     private String last_name;
 
@@ -19,12 +16,12 @@ public class User {
 
     private String email_address;
 
-    private Timestamp created_time;
+    private Timestamp create_time;
 
-    public Integer getId(){
+    public String getId(){
         return id;
     }
-    public void setId(Integer id){
+    public void setId(String id){
         this.id = id;
     }
     public String getLast_name(){
@@ -46,10 +43,10 @@ public class User {
         this.email_address = email_address;
     }
     public Timestamp getCreate_Time(){
-        return created_time;
+        return create_time;
     }
     public void setCreate_Time(Timestamp created_time)
     {
-        this.created_time = created_time;
+        this.create_time = created_time;
     }
 }
