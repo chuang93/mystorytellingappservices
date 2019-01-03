@@ -14,13 +14,12 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.bind.PropertyException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -28,9 +27,6 @@ import java.util.Collections;
 //Controller or RestController annotation required for this @Component stereotype that uses @RequestMapping or @GetMapping for example.
 @RestController
 public class UserResource {
-
-    private static String VALID = "Valid";
-    private static String INVALID = "Invalid";
 
     private UserRepositoryService userRepositoryService;
 
@@ -43,7 +39,6 @@ public class UserResource {
     public UserResource(UserRepositoryService userRepositoryService){
             this.userRepositoryService = userRepositoryService;
     }
-
     @PostMapping(value = "/verify")
     public ResponseEntity<User> login(String idtoken) throws Exception{
         //TODO: DOESNT SEEM TO EVALUTATE TO TRUE NO MATTER WHAT
@@ -79,17 +74,18 @@ public class UserResource {
             if (emailVerified) {
                 try{
                     User user = validateUserRepository(userId, email, givenName, familyName);
-                    return new ResponseEntity<>(user, HttpStatus.OK);
+                    return getResponseOkJson(user);
                 }catch(Exception e){
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                    logger.debug("internal server error in validate user repository layer");
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
                 }
             } else {
                 logger.debug(email + " unable to be verified against retrieved ID Token.");
-                return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
         }
         logger.debug(String.format("Error, issue with id token sent: %s", idtoken));
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(null);
     }
 
     @GetMapping( value = "/users/all")
@@ -125,4 +121,10 @@ public class UserResource {
             }
         }
     }
+    private ResponseEntity getResponseOkJson(Object o){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
+        return ResponseEntity.ok().headers(headers).body(o);
+    }
+
 }
