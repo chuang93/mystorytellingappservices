@@ -5,12 +5,15 @@ import com.phage.services.repository.service.LocalUserRepositoryService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Nonnull;
+
 import static com.phage.services.resource.ResourceUtility.getResponseOkJson;
 
-@RequestMapping(value="user/local")
+@RequestMapping(value="user/")
 @RestController
 public class LocalUserResource {
     private LocalUserRepositoryService localUserRepositoryService;
@@ -21,39 +24,47 @@ public class LocalUserResource {
     public LocalUserResource(LocalUserRepositoryService localUserRepositoryService){
         this.localUserRepositoryService = localUserRepositoryService;
     }
-    @PostMapping(value = "/persist")
-    public ResponseEntity<LocalUser> persist(String lastName, String firstName, String email, String userName, String password) throws Exception{
+    @PostMapping(value = "/signup")
+    public ResponseEntity<LocalUser> signup(@Nonnull String lastName, @Nonnull String firstName, @Nonnull String email, @Nonnull String username, @Nonnull String password) throws Exception{
         //TODO: DOESNT SEEM TO EVALUTATE TO TRUE NO MATTER WHAT
         if(logger.isDebugEnabled()){
             logger.debug("This is Debug Mode");
         }
-        LocalUser localUser = validateUserRepository(lastName, firstName, email, userName, password);
+        LocalUser existingUserEmail = localUserRepositoryService.findByEmail(email);
+        LocalUser existingUserUsername = localUserRepositoryService.findByUsername(username);
+        //TODO::CHANGE INVALID USER CONDITION TO IMPLEMENT CORRECT LOGIC
+        boolean invalidUser = false;
+        if(invalidUser)
+        {
+            logger.debug(String.format("Invalid User from email:  " + email));
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else {
+            if (existingUserEmail != null || existingUserUsername != null) {
+                String existError = String.format("Username %s or Email %s already exists in the database", username, email);
+                logger.debug(existError);
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            } else {
+                LocalUser newLocalUser = localUserRepositoryService.getNewLocalUser(lastName, firstName, email, username, password);
+                try{
+                    localUserRepositoryService.saveUser(newLocalUser);
+                    return getResponseOkJson(newLocalUser);
+                }catch(Exception e){
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+        }
+    }
+
+    @GetMapping( value = "/{email}")
+    public ResponseEntity<LocalUser> getUser(@PathVariable @Nonnull String email){
+        LocalUser localUser = localUserRepositoryService.findByEmail(email);
         return getResponseOkJson(localUser);
     }
 
     @GetMapping( value = "/all")
-    @ResponseBody //makes it so that the response returns a body with an automatically serialized json object
-    public  Iterable<LocalUser> getAllUsers(){
-        return localUserRepositoryService.findAll();
+    public  ResponseEntity<Iterable<LocalUser>> getAllUsers(){
+        return getResponseOkJson(localUserRepositoryService.findAll());
     }
 
-    private LocalUser validateUserRepository(String lastName, String firstName, String email, String userName, String password) throws Exception{
-        LocalUser existingUser = localUserRepositoryService.findByEmail(email);
-        boolean invalidUser = false;
-        //TODO::CHANGE INVALID USER CONDITION TO IMPLEMENT CORRECT LOGIC
-        if(invalidUser)
-        {
-            logger.debug(String.format("Invalid User from email:  " + email));
-            throw new Exception("Invalid User");
-        }
-        else {
-            if (existingUser != null) {
-                logger.debug(String.format("User %s %s, email %s already exists in Database.", firstName, lastName, email));
-                return existingUser;
-            } else {
-                LocalUser newLocalUser = localUserRepositoryService.getNewLocalUser(lastName, firstName, email, userName, password);
-                return newLocalUser;
-            }
-        }
-    }
 }

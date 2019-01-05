@@ -1,9 +1,9 @@
 #logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/myappdb
+    url: jdbc:mysql://localhost:3306/myappdb?useSSL=false
     username: root
-    password: Holydude93!
+    password: huang101063
   jpa:
     show-sql: true
     hibernate:

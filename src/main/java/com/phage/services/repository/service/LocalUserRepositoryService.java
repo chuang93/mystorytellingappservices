@@ -20,6 +20,8 @@ public class LocalUserRepositoryService {
 
     public LocalUser findByEmail(String email){ return localUserRepository.findByEmail(email);}
 
+    public LocalUser findByUsername(String username){ return localUserRepository.findByUsername(username);}
+
     public LocalUser findByName(String lastName, String firstName){ return localUserRepository.findByLastNameAndFirstName(lastName, firstName);}
 
     public void saveUser(LocalUser user){ localUserRepository.save(user);}
